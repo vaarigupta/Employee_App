@@ -12,21 +12,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.spring.model.User;
 import com.spring.model.Employee;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin()
 @RestController
 @RequestMapping({ "/employees" })
 public class TestController {
 
 	private List<Employee> employees = createList();
 
-	@GetMapping( produces = "application/json")
+	@GetMapping(produces = "application/json")
 	public List<Employee> firstPage() {
 		return employees;
 	}
-	
+
+
+	@GetMapping(produces = "application/json")
+	@RequestMapping({ "/validateLogin" })
+	public User validateLogin() {
+		return new User("User successfully authenticated");
+	}
+
 	@DeleteMapping(path = { "/{id}" })
 	public Employee delete(@PathVariable("id") int id) {
 		Employee deletedEmp = null;
@@ -43,12 +50,11 @@ public class TestController {
 	@PostMapping
 	public Employee create(@RequestBody Employee user) {
 		employees.add(user);
-		System.out.println(employees);
 		return user;
 	}
 
 	private static List<Employee> createList() {
-		List<Employee> tempEmployees = new ArrayList<Employee>();
+		List<Employee> tempEmployees = new ArrayList<>();
 		Employee emp1 = new Employee();
 		emp1.setName("emp1");
 		emp1.setDesignation("manager");
@@ -64,6 +70,4 @@ public class TestController {
 		tempEmployees.add(emp2);
 		return tempEmployees;
 	}
-
 }
-
